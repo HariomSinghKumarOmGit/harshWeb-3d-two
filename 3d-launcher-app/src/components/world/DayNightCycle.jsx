@@ -1,13 +1,15 @@
 import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { Environment } from '@react-three/drei';
 import { useDayNight } from '../../hooks/useDayNight';
 
 /**
  * Day/Night cycle component
- * Manages directional sun light and ambient lighting based on time of day
+ * Manages directional sun light, ambient lighting, and HDRI environment
  */
 export const DayNightCycle = () => {
-  const { sunPosition, skyIntensity, isDay } = useDayNight(60000); // 60 second cycle
+  // 5 minutes = 300,000 ms
+  const { sunPosition, skyIntensity, isDay } = useDayNight(300000);
   const sunRef = useRef(null);
   const ambientRef = useRef(null);
 
@@ -40,21 +42,11 @@ export const DayNightCycle = () => {
       {/* Ambient Light */}
       <ambientLight ref={ambientRef} />
 
-      {/* Sky color (simulated with fog) */}
-      <fog
-        attach="fog"
-        args={[
-          isDay ? '#87CEEB' : '#0A1628',
-          10,
-          50
-        ]}
-      />
+      {/* HDRI Environment */}
+      <Environment preset={isDay ? "sunset" : "night"} background blur={0.5} />
 
-      {/* Background color */}
-      <color
-        attach="background"
-        args={[isDay ? '#87CEEB' : '#0A1628']}
-      />
+      {/* Fog for depth */}
+      <fog attach="fog" args={[isDay ? '#87CEEB' : '#0A1628', 10, 50]} />
     </>
   );
 };

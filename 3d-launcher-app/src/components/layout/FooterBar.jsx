@@ -18,29 +18,32 @@ export const FooterBar = () => {
   }, []);
 
   return (
-    <div className="fixed bottom-0 left-1/3 right-1/3 bg-black border-t border-gray-800 px-6 py-3 z-ui">
-      <div className="flex items-center justify-between text-sm">
-        {/* Server Status */}
-        <div className="flex items-center space-x-2">
-          <div className={`w-2 h-2 rounded-full ${serverStatus === 'online' ? 'bg-green-500' : 'bg-red-500'}`} />
-          <span className="text-gray-400">Server:</span>
-          <span className="text-white font-medium">
-            {serverStatus === 'online' ? 'Online' : 'Offline'}
-          </span>
-        </div>
+    <div className="fixed bottom-0 left-0 right-0 flex justify-center z-ui pointer-events-none">
+      {/* Centered Container (1/3 width) */}
+      <div className="w-1/3 bg-black border-t border-gray-800 px-6 py-2 rounded-t-lg pointer-events-auto shadow-lg">
+        <div className="flex items-center justify-between text-xs text-gray-400">
+          {/* Server Status */}
+          <div className="flex items-center space-x-2">
+            <div className={`w-2 h-2 rounded-full ${serverStatus === 'online' ? 'bg-green-500' : 'bg-red-500'}`} />
+            <span>Server:</span>
+            <span className="text-white font-medium">
+              {serverStatus === 'online' ? 'Online' : 'Offline'}
+            </span>
+          </div>
 
-        {/* Ping */}
-        <div className="flex items-center space-x-2">
-          <span className="text-gray-400">Ping:</span>
-          <span className={`font-medium ${ping < 50 ? 'text-green-400' : ping < 100 ? 'text-yellow-400' : 'text-red-400'}`}>
-            {ping}ms
-          </span>
-        </div>
+          {/* Ping */}
+          <div className="flex items-center space-x-2">
+            <span>Ping:</span>
+            <span className={`font-medium ${ping < 50 ? 'text-green-400' : ping < 100 ? 'text-yellow-400' : 'text-red-400'}`}>
+              {ping}ms
+            </span>
+          </div>
 
-        {/* Network Info */}
-        <div className="flex items-center space-x-2">
-          <span className="text-gray-400">Network:</span>
-          <span className="text-white font-medium">Stable</span>
+          {/* Network Info */}
+          <div className="flex items-center space-x-2">
+            <span>Network:</span>
+            <span className="text-white font-medium">Stable</span>
+          </div>
         </div>
       </div>
     </div>
