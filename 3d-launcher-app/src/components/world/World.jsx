@@ -55,7 +55,7 @@ export const World = () => {
       <div className="layer-world">
         <Canvas
           shadows
-          camera={{ position: [0, 2, 6], fov: 50 }}
+          camera={{ position: [0, 2, 6], fov: 50, far: 100 }} // Increased far plane for mountains
           gl={{ antialias: true, alpha: true }}
         >
           {/* Day/Night Cycle Lighting */}
@@ -80,8 +80,18 @@ export const World = () => {
             {/* Characters */}
             <group position={[0, 0, 0]}>
               <Steve />
+
+              {/* Adult Wolf */}
               <group position={[1.5, 0, 1]}>
-                <Wolf username="Player" />
+                <Wolf username="Wolf" />
+              </group>
+
+              {/* Puppies */}
+              <group position={[-2, 0, 2]} scale={0.5}>
+                <Wolf username="Puppy 1" isPuppy={true} />
+              </group>
+              <group position={[3, 0, 3]} scale={0.5}>
+                <Wolf username="Puppy 2" isPuppy={true} />
               </group>
             </group>
 

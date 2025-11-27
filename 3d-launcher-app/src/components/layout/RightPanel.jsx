@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 /**
  * Right panel component
- * Icon-only design with hover labels and pop-out panels for Profile/Friends
+ * Large Login button at top, Friends button at bottom
  */
 export const RightPanel = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,29 +27,30 @@ export const RightPanel = () => {
   };
 
   return (
-    <div className="h-full flex flex-col items-end p-4 space-y-4 pointer-events-auto">
-      {/* Profile Icon */}
-      <div className="relative group flex items-center flex-row-reverse">
+    <div className="h-full flex flex-col justify-between items-end p-4 pointer-events-auto">
+      {/* Top: Login / Profile Button */}
+      <div className="relative">
         <button
           onClick={() => togglePanel('profile')}
-          className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl smooth-transition ${activePanel === 'profile'
-              ? 'bg-blue-600 text-white shadow-lg scale-110'
-              : 'glass text-gray-300 hover:bg-white/20 hover:scale-105'
+          className={`px-6 py-3 rounded-xl font-bold text-lg smooth-transition shadow-lg flex items-center space-x-2 ${activePanel === 'profile'
+            ? 'bg-blue-600 text-white scale-105'
+            : 'glass text-white hover:bg-white/20 hover:scale-105'
             }`}
         >
           {isLoggedIn ? (
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-blue-500 flex items-center justify-center text-white text-xs font-bold">
-              {username[0]}
-            </div>
+            <>
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-blue-500 flex items-center justify-center text-xs">
+                {username[0]}
+              </div>
+              <span>{username}</span>
+            </>
           ) : (
-            '👤'
+            <>
+              <span>Login</span>
+              <span className="text-xl">👤</span>
+            </>
           )}
         </button>
-
-        {/* Hover Label */}
-        <div className="absolute right-14 px-3 py-1 bg-black/80 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none backdrop-blur-sm border border-white/10">
-          {isLoggedIn ? 'My Profile' : 'Login'}
-        </div>
 
         {/* Profile Pop-out */}
         <AnimatePresence>
@@ -59,7 +60,7 @@ export const RightPanel = () => {
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: 20, scale: 0.9 }}
               transition={{ duration: 0.2 }}
-              className="absolute right-14 top-0 w-64 z-50"
+              className="absolute right-0 top-16 w-64 z-50"
             >
               <LoginProfile
                 isLoggedIn={isLoggedIn}
@@ -72,22 +73,18 @@ export const RightPanel = () => {
         </AnimatePresence>
       </div>
 
-      {/* Friends Icon */}
-      <div className="relative group flex items-center flex-row-reverse">
+      {/* Bottom: Friends Button */}
+      <div className="relative">
         <button
           onClick={() => togglePanel('friends')}
-          className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl smooth-transition ${activePanel === 'friends'
-              ? 'bg-green-600 text-white shadow-lg scale-110'
-              : 'glass text-gray-300 hover:bg-white/20 hover:scale-105'
+          className={`px-6 py-3 rounded-xl font-bold text-lg smooth-transition shadow-lg flex items-center space-x-2 ${activePanel === 'friends'
+              ? 'bg-green-600 text-white scale-105'
+              : 'glass text-white hover:bg-white/20 hover:scale-105'
             }`}
         >
-          👥
+          <span>Friends</span>
+          <span className="text-xl">👥</span>
         </button>
-
-        {/* Hover Label */}
-        <div className="absolute right-14 px-3 py-1 bg-black/80 text-white text-sm rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none backdrop-blur-sm border border-white/10">
-          Friends
-        </div>
 
         {/* Friends Pop-out */}
         <AnimatePresence>
@@ -97,7 +94,7 @@ export const RightPanel = () => {
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: 20, scale: 0.9 }}
               transition={{ duration: 0.2 }}
-              className="absolute right-14 top-0 w-64 z-50"
+              className="absolute right-0 bottom-16 w-64 z-50"
             >
               <FriendList />
             </motion.div>

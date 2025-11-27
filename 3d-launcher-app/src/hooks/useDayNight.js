@@ -25,9 +25,9 @@ export const useDayNight = (cycleDuration = 60000) => {
   // Calculate sun position in arc (moves from -π to π)
   const sunAngle = timeOfDay * Math.PI * 2;
   const sunPosition = new Vector3(
-    Math.cos(sunAngle) * 10,
-    Math.sin(sunAngle) * 10,
-    -5
+    Math.cos(sunAngle) * 60,
+    Math.sin(sunAngle) * 60,
+    -30
   );
 
   // Calculate sky intensity (brightest at noon, darkest at midnight)

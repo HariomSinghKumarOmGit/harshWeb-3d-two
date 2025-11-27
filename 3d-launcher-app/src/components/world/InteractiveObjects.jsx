@@ -88,7 +88,6 @@ export const InteractiveObjects = ({ onObjectClick }) => {
     <group>
       {/* Physics Bones */}
       <DraggableBone position={[1, 2, 2]} onClick={handleClick} />
-      <DraggableBone position={[-1, 3, 3]} onClick={handleClick} />
 
       {/* Static Apples (Visual only for now) */}
       <mesh
