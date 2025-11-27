@@ -55,7 +55,7 @@ export const World = () => {
       <div className="layer-world">
         <Canvas
           shadows
-          camera={{ position: [0, 2, 8], fov: 50 }}
+          camera={{ position: [0, 1.5, 4.5], fov: 45 }} // Zoomed in, slightly lower angle
           gl={{ antialias: true, alpha: true }}
         >
           {/* Day/Night Cycle Lighting */}
@@ -69,11 +69,17 @@ export const World = () => {
             minPolarAngle={Math.PI / 3}
             maxAzimuthAngle={Math.PI / 6}
             minAzimuthAngle={-Math.PI / 6}
+            target={[0.5, 0.5, 0]} // Focus slightly to the right to balance Steve + Wolf
           />
 
           {/* Characters */}
-          <Steve />
-          <Wolf username="Player" />
+          <group position={[0, 0, 0]}> {/* Adjusted to align head ~1/4 from top */}
+            <Steve />
+            {/* Wolf moved to the right with a gap */}
+            <group position={[1.2, 0, 0.5]}>
+              <Wolf username="Player" />
+            </group>
+          </group>
 
           {/* Interactive Objects */}
           <InteractiveObjects onObjectClick={handleObjectClick} />

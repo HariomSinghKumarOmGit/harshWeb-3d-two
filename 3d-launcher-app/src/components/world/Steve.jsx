@@ -58,6 +58,20 @@ export const Steve = () => {
       <mesh position={[0, 0.6, 0]} castShadow>
         <boxGeometry args={[0.8, 1.2, 0.4]} />
         <meshStandardMaterial color="#00BFFF" />
+
+        {/* Play Button on Shirt */}
+        <group position={[0, 0.2, 0.21]}>
+          {/* Button Circle Background */}
+          <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.15, 0.15, 0.02, 32]} />
+            <meshStandardMaterial color="#FFFFFF" />
+          </mesh>
+          {/* Play Triangle */}
+          <mesh rotation={[0, 0, -Math.PI / 2]} position={[0.02, 0, 0.02]}>
+            <cylinderGeometry args={[0.08, 0.08, 0.02, 3]} />
+            <meshStandardMaterial color="#00BFFF" />
+          </mesh>
+        </group>
       </mesh>
 
       {/* Left Arm */}
