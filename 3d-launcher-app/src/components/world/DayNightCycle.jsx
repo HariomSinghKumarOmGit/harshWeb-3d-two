@@ -1,12 +1,12 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Environment, Stars, Cloud } from '@react-three/drei';
+import { Environment, Stars, Cloud, Sky } from '@react-three/drei';
 import { useDayNight } from '../../hooks/useDayNight';
 import * as THREE from 'three';
 
 /**
  * Day/Night cycle component
- * Manages Sun, Moon, Stars, and Lighting
+ * Manages Sun, Moon, Stars, and Lighting with smooth transitions
  */
 export const DayNightCycle = () => {
   // 5 minutes = 300,000 ms
@@ -15,24 +15,42 @@ export const DayNightCycle = () => {
   const moonRef = useRef(null);
   const ambientRef = useRef(null);
 
+  // Colors for interpolation
+  const dayColor = useMemo(() => new THREE.Color('#87CEEB'), []);
+  const nightColor = useMemo(() => new THREE.Color('#0A1628'), []);
+  const fogColor = useMemo(() => new THREE.Color(), []);
+
   // Calculate Moon position (opposite to Sun)
   const moonPosition = useMemo(() => new THREE.Vector3(), []);
 
-  useFrame(() => {
+  useFrame(({ scene }) => {
+    // 1. Update Sun Light
     if (sunRef.current) {
       sunRef.current.position.copy(sunPosition);
-      sunRef.current.intensity = Math.max(0.5, skyIntensity * 2);
+      sunRef.current.intensity = Math.max(0, skyIntensity * 1.5);
     }
 
-    // Moon is opposite to Sun
+    // 2. Update Moon Position
     moonPosition.copy(sunPosition).negate();
     if (moonRef.current) {
       moonRef.current.position.copy(moonPosition);
       moonRef.current.lookAt(0, 0, 0);
     }
 
+    // 3. Update Ambient Light
     if (ambientRef.current) {
-      ambientRef.current.intensity = Math.max(0.1, skyIntensity * 0.5);
+      // Minimum ambient light at night is 0.1, max is 0.6
+      ambientRef.current.intensity = THREE.MathUtils.lerp(0.1, 0.6, Math.max(0, skyIntensity));
+    }
+
+    // 4. Smooth Fog Color Transition
+    // skyIntensity goes from -1 (midnight) to 1 (noon). 
+    // We map it to 0..1 for lerp.
+    const lerpFactor = (skyIntensity + 1) / 2; // 0 = night, 1 = day
+    fogColor.lerpColors(nightColor, dayColor, Math.max(0, skyIntensity)); // Use max(0) to keep it dark at night
+
+    if (scene.fog) {
+      scene.fog.color.copy(fogColor);
     }
   });
 
@@ -54,7 +72,7 @@ export const DayNightCycle = () => {
       {/* Moon Light (weaker, blueish) */}
       <directionalLight
         position={moonPosition}
-        intensity={isDay ? 0 : 0.5}
+        intensity={Math.max(0, -skyIntensity * 0.5)} // Only active at night
         color="#8888FF"
         castShadow
       />
@@ -87,20 +105,35 @@ export const DayNightCycle = () => {
         </mesh>
       </group>
 
+      {/* Dynamic Sky (Replaces static HDRI background) */}
+      <Sky
+        sunPosition={sunPosition}
+        turbidity={10}
+        rayleigh={2}
+        mieCoefficient={0.005}
+        mieDirectionalG={0.8}
+      />
+
       {/* Stars (fade in at night) */}
-      {!isDay && (
-        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-      )}
+      <Stars
+        radius={100}
+        depth={50}
+        count={5000}
+        factor={4}
+        saturation={0}
+        fade
+        speed={1}
+      />
 
       {/* Clouds */}
       <Cloud position={[-20, 15, -20]} opacity={0.5} speed={0.1} width={20} depth={2} segments={20} />
       <Cloud position={[20, 18, -10]} opacity={0.5} speed={0.1} width={20} depth={2} segments={20} />
 
-      {/* HDRI Environment */}
-      <Environment preset={isDay ? "sunset" : "night"} background blur={0.5} />
+      {/* Environment for Reflections (No Background) */}
+      <Environment preset="sunset" />
 
-      {/* Fog for depth */}
-      <fog attach="fog" args={[isDay ? '#87CEEB' : '#0A1628', 10, 80]} />
+      {/* Fog for depth (Color updated in useFrame) */}
+      <fog attach="fog" args={['#87CEEB', 10, 80]} />
     </>
   );
 };

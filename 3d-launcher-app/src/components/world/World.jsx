@@ -85,14 +85,6 @@ export const World = () => {
               <group position={[1.5, 0, 1]}>
                 <Wolf username="Wolf" />
               </group>
-
-              {/* Puppies */}
-              <group position={[-2, 0, 2]} scale={0.5}>
-                <Wolf username="Puppy 1" isPuppy={true} />
-              </group>
-              <group position={[3, 0, 3]} scale={0.5}>
-                <Wolf username="Puppy 2" isPuppy={true} />
-              </group>
             </group>
 
             {/* Interactive Objects (Physics Enabled) */}
