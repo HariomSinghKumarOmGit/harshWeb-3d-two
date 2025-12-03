@@ -1,9 +1,10 @@
 import React from 'react';
 import LaunchButton from '../components/LaunchButton';
 import NewsCard from '../components/NewsCard';
+import ScoreDisplay from '../components/ScoreDisplay';
 import { User, Bell, Search } from 'lucide-react';
 
-const Home = () => {
+const Home = ({ score, setScore, onSupernova }) => {
   const newsItems = [
     {
       id: 1,
@@ -34,6 +35,8 @@ const Home = () => {
       <header className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <h1 className="text-2xl font-bold text-white tracking-tight">Home</h1>
+          <div className="h-6 w-px bg-white/10" />
+          <ScoreDisplay score={score} setScore={setScore} onSupernova={onSupernova} />
           <div className="h-6 w-px bg-white/10" />
           <span className="text-gray-400 text-sm">20,700 Online</span>
         </div>

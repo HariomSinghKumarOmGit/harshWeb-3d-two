@@ -9,11 +9,28 @@ import Friends from './pages/Friends';
 import Settings from './pages/Settings';
 
 function App() {
+  const [score, setScore] = React.useState(0);
+  const [supernovaActive, setSupernovaActive] = React.useState(false);
+
+  const handleSupernova = () => {
+    setSupernovaActive(true);
+  };
+
+  const handleSupernovaComplete = () => {
+    setSupernovaActive(false);
+    setScore(0);
+  };
+
   return (
     <BrowserRouter>
-      <Layout>
+      <Layout
+        score={score}
+        setScore={setScore}
+        supernovaActive={supernovaActive}
+        onSupernovaComplete={handleSupernovaComplete}
+      >
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home score={score} setScore={setScore} onSupernova={handleSupernova} />} />
           <Route path="/quick-play" element={<QuickPlay />} />
           <Route path="/servers" element={<Servers />} />
           <Route path="/store" element={<Store />} />
