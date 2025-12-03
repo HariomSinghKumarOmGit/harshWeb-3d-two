@@ -1,6 +1,7 @@
 import React from 'react';
 import { Home, Settings, ShoppingBag, Globe, Gamepad2, Users } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 
 const SidebarItem = ({ icon: Icon, active, onClick, label }) => {
@@ -53,20 +54,21 @@ const SidebarItem = ({ icon: Icon, active, onClick, label }) => {
 };
 
 const Sidebar = () => {
-  const [activeTab, setActiveTab] = React.useState('home');
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const menuItems = [
-    { id: 'home', icon: Home, label: 'Home' },
-    { id: 'games', icon: Gamepad2, label: 'Quick Play' },
-    { id: 'browser', icon: Globe, label: 'Servers' },
-    { id: 'store', icon: ShoppingBag, label: 'Store' },
-    { id: 'friends', icon: Users, label: 'Friends' },
+    { id: 'home', path: '/', icon: Home, label: 'Home' },
+    { id: 'games', path: '/quick-play', icon: Gamepad2, label: 'Quick Play' },
+    { id: 'browser', path: '/servers', icon: Globe, label: 'Servers' },
+    { id: 'store', path: '/store', icon: ShoppingBag, label: 'Store' },
+    { id: 'friends', path: '/friends', icon: Users, label: 'Friends' },
   ];
 
   return (
     <div className="w-20 h-screen bg-surface border-r border-white/5 flex flex-col items-center py-6 space-y-8">
       <div className="mb-4">
-        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer" onClick={() => navigate('/')}>
           <img src="https://cdn-icons-png.flaticon.com/512/5968/5968863.png" alt="Logo" className="w-8 h-8" />
         </div>
       </div>
@@ -77,8 +79,8 @@ const Sidebar = () => {
             key={item.id}
             icon={item.icon}
             label={item.label}
-            active={activeTab === item.id}
-            onClick={() => setActiveTab(item.id)}
+            active={location.pathname === item.path}
+            onClick={() => navigate(item.path)}
           />
         ))}
       </div>
@@ -87,8 +89,8 @@ const Sidebar = () => {
         <SidebarItem
           icon={Settings}
           label="Settings"
-          active={activeTab === 'settings'}
-          onClick={() => setActiveTab('settings')}
+          active={location.pathname === '/settings'}
+          onClick={() => navigate('/settings')}
         />
       </div>
     </div>
